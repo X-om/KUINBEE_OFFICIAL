@@ -1,0 +1,23 @@
+import express from 'express';
+import adminRouter from './routes/Admin/adminRouter';
+import userRouter from './routes/User/userRouter';
+import superAdminRouter from './routes/Superadmin/superAdminRouter';
+import publicRouter from './routes/public/publicRouter';
+
+const app = express();
+
+app.use(express.json());
+
+// unauthenticated routes
+app.use('/public', publicRouter);
+
+
+app.use('/api/v1/admin', adminRouter);
+app.use('/api/v1/user', userRouter);
+app.use('/api/v1/superAdmin', superAdminRouter);
+
+
+
+
+app.get('/', (req, res) => { res.send('Hello from kuinbee backend!'); });
+app.listen(process.env.PORT || 3000, () => { console.log(`Server is running on port ${process.env.PORT || 3000}`); });
