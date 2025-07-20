@@ -20,4 +20,5 @@ app.use('/api/v1/superAdmin', superAdminRouter);
 
 
 app.get('/', (req, res) => { res.send('Hello from kuinbee backend!'); });
-app.listen(process.env.PORT || 3000, () => { console.log(`Server is running on port ${process.env.PORT || 3000}`); });
+
+app.listen(process.env.PORT || 3000, () => { console.log(`Server is running on port http://localhost:${process.env.PORT || 3000}`); });
