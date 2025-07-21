@@ -1,15 +1,12 @@
 // prisma/schema.prisma
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
-}
-
-generator accelerate {
-  provider = "accelerate"
 }
 
 /// ==================== ENUMS ====================
@@ -33,13 +30,18 @@ model Auth {
   email     String   @unique
   password  String
   role      Role
-  linkedId  String // Links to SuperAdmin/Admin/User depending on role
   createdAt DateTime @default(now())
 
-  // Optional: Role-specific data relation
-  superadmin      SuperAdmin?      @relation(fields: [linkedId], references: [id], map: "Auth_linkedId_SuperAdmin_fkey")
-  admin           Admin?           @relation(fields: [linkedId], references: [id], map: "Auth_linkedId_Admin_fkey")
-  user            User?            @relation(fields: [linkedId], references: [id], map: "Auth_linkedId_User_fkey")
+  // Separate foreign keys
+  superAdminId String?
+  adminId      String?
+  userId       String?
+
+  // Relations
+  superadmin SuperAdmin? @relation(fields: [superAdminId], references: [id])
+  admin      Admin?      @relation(fields: [adminId], references: [id])
+  user       User?       @relation(fields: [userId], references: [id])
+
   PasswordDetails PasswordDetails?
 }
 
@@ -106,14 +108,21 @@ model AdminPermissions {
 /// ----------- Personal Info -----------
 
 model PersonalInfo {
-  id         String       @id @default(cuid())
-  aadharUrl  String
-  panCardUrl String
-  address    String
-  fatherName String
-  motherName String
-  SuperAdmin SuperAdmin[]
-  Admin      Admin[]
+  id          String       @id @default(cuid())
+  aadharUrl   String
+  panCardUrl  String
+  address     String
+  fatherName  String
+  motherName  String
+  gender      String
+  dob         DateTime
+  city        String
+  state       String
+  country     String
+  pinCode     String
+  nationality String
+  SuperAdmin  SuperAdmin[]
+  Admin       Admin[]
 }
 
 /// ----------- User -----------
