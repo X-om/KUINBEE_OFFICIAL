@@ -11,6 +11,7 @@ const loginInputValidation = async (req: ICustomLogInRequest, res: Response<IUni
     const { emailId, password } = req.body;
     if (!emailId || !password) return void res.status(400).json({ success: false, error: 'EmailId and password is required' });
     if (!emailInputValidation(emailId)) return void res.status(400).json({ success: false, error: 'Invalid email format.' });
+    
 
     return next();
 };
