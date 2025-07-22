@@ -32,12 +32,10 @@ model Auth {
   role      Role
   createdAt DateTime @default(now())
 
-  // Separate foreign keys
   superAdminId String?
   adminId      String?
   userId       String?
 
-  // Relations
   superadmin SuperAdmin? @relation(fields: [superAdminId], references: [id])
   admin      Admin?      @relation(fields: [adminId], references: [id])
   user       User?       @relation(fields: [userId], references: [id])
