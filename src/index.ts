@@ -4,6 +4,7 @@ import userRouter from './routes/User/userRouter';
 import superAdminRouter from './routes/Superadmin/superAdminRouter';
 import publicRouter from './routes/public/publicRouter';
 import authRouter from './routes/authRouter/authRouter';
+import { PORT } from './env';
 
 const app = express();
 
@@ -22,4 +23,4 @@ app.use('/api/v1/superAdmin', superAdminRouter);
 
 app.get('/', (req, res) => { res.send('Hello from kuinbee backend!'); });
 
-app.listen(process.env.PORT || 3000, () => { console.log(`Server is running on port http://localhost:${process.env.PORT || 3000}`); });
+app.listen(PORT, () => { console.log(`Server is running on port http://localhost:${PORT}`); });

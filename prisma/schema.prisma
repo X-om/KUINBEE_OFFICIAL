@@ -21,6 +21,7 @@ enum AdminPermission {
   CREATE
   UPDATE
   DELETE
+  READ
 }
 
 /// ==================== MODELS ====================

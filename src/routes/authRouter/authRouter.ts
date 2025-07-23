@@ -1,11 +1,15 @@
 import express from 'express';
 import { loginInputValidation } from '../../middlewares/auth/handleLoginValidation';
-import { loginController } from '../../controllers/auth/authControllers';
+import { loginPassword } from '../../controllers/auth/authControllers';
 const authRouter = express.Router();
 
 
-authRouter.post('/login', loginInputValidation, loginController);
 // authRouter.post('/signup', registrationInputValidation, registrationController);
+
+
+
+authRouter.post('/loginPassword', loginInputValidation, loginPassword);
+
 
 
 export default authRouter;

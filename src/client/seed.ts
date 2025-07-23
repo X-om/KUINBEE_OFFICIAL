@@ -1,4 +1,4 @@
-import prisma from "./getClient";
+import { prisma } from "./getClient";
 import bcrypt from "bcrypt";
 
 const createSuperAdmin = async () => {
