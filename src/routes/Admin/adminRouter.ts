@@ -10,10 +10,6 @@ import { adminUserRouter } from './adminUsers/adminUserRouter';
 const adminRouter = express.Router();
 
 
-//TODO: INFO -> unauthRoutes
-usePath(adminRouter, loginRouter, '/login');
-usePath(adminRouter, registrationRouter, '/signup');
-
 adminRouter.use(requireAuth, requireAdminAuth);
 
 usePath(adminRouter, datasetRouter, '/datasets');
