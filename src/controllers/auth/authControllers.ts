@@ -28,7 +28,7 @@ const loginPassword = async (req: ICustomLogInRequest, res: Response<IUnifiedRes
 
         const token = generateAuthToken(jwtPayload);
 
-        return void res.status(200).json({ success: true, data: { token } });
+        return void res.status(200).json({ success: true, data: { token, identityCode: KUINBEE_SUPER_ADMIN_IDENTITY_CODE } });
     } catch (error) {
         return void res.status(500).json({ success: false, error: 'Internal server error' });
     }
