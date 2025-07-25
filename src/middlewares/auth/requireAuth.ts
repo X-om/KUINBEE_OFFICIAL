@@ -33,4 +33,4 @@ const requireAuth = async (req: ICustomRequest, res: Response, next: NextFunctio
     }
 };
 
-export default requireAuth;
+export { requireAuth };

@@ -13,13 +13,13 @@ import { KUINBEE_SUPER_ADMIN_IDENTITY_CODE } from "../../env";
 const loginPassword = async (req: ICustomLogInRequest, res: Response<IUnifiedResponse>): Promise<void> => {
     try {
         const { emailId, password } = req.body;
-        const user = await prisma.auth.findUnique({ where: { email: emailId }, include: { admin: { include: { permissions: true } } } });
+        const user = await prisma.auth.findUnique({ where: { emailId }, include: { admin: { include: { permissions: true } } } });
 
         if (!user) return void res.status(404).json({ success: false, error: 'Invalid email or user not found' });
         if (!(await verifyPassword(password, user.password))) return void res.status(401).json({ success: false, error: 'Incorrect password' });
 
         const jwtPayload = {
-            id: user.id, email: user.email, role: user.role,
+            id: user.id, email: user.emailId, role: user.role,
             ...(user.role === 'ADMIN' && { adminId: user.adminId ?? undefined, adminPermissions: user.admin?.permissions.permissions.map(p => p) ?? [] }),
             ...(user.role === 'SUPERADMIN' && { superAdminId: user.superAdminId ?? undefined }),
             ...(user.role === 'USER' && { userId: user.userId ?? undefined }),
