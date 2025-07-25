@@ -1,13 +1,18 @@
-import { Request, Response, NextFunction } from 'express';
-// TODO : OM need to create admin specific auth middleware here ICuromeAdminRequest here
-// TODO : OM need to create admin cutome reque
-const requireAdminAuth = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+import { Response, NextFunction } from 'express';
+import { ICutomeSuperAdminRequest } from '../../utility/common/interfaces/customeRequestInterface';
+import { KUINBEE_SUPER_ADMIN_IDENTITY_CODE } from '../../env';
+
+const requireAdminAuth = async (req: ICutomeSuperAdminRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
+        if (req.role !== 'SUPERADMIN') return void res.status(403).json({ success: false, error: 'Access denied. Admins only.' });
+        if (req.identityToken === undefined || req.authToken === undefined || req.identityToken !== KUINBEE_SUPER_ADMIN_IDENTITY_CODE)
+            return void res.status(401).json({ success: false, error: 'Authentication token is missing or invalid' });
+
+        req.AdminPermissions = ['READ', 'WRITE', 'DELETE'];
         return next();
     } catch (error) {
         console.error("need to add handlecatch function here", error);
     }
 }
-
 
 export { requireAdminAuth };

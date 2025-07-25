@@ -1,17 +1,36 @@
-import { Response, Request, NextFunction } from "express";
+import { Response, NextFunction, RequestHandler } from "express";
+import { ICustomRequest } from "../../utility/common/interfaces/customeRequestInterface";
+import { decodeAuthToken } from "../../utility/common/security/jwtUtils";
+import { IMinimalUserToken } from "../../utility/common/interfaces/tokenInterface";
 
-// TODO: OM need to add more exact type for request ( create custome request interface )
-export interface ICustomRequest extends Request {
-    user_id?: string; authToken?: string; // this is just and example
-}
 const requireAuth = async (req: ICustomRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        req.user_id = '123';
+        const authHeader = req.headers.authorization;
+        const authHeaderToken = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1].split('|') : null;
+
+        const authToken = authHeaderToken && authHeaderToken[0];
+        const identityToken = authHeaderToken && authHeaderToken[1];
+
+        if (!authToken || !identityToken) {
+            res.status(401).json({ success: false, error: 'Authentication token is missing or invalid' });
+            return;
+        }
+
+        const decoded = decodeAuthToken<IMinimalUserToken>(authToken);
+        if (!decoded.decodedToken?.user_id) {
+            res.status(401).json({ success: false, error: 'Invalid authentication token data' });
+            return;
+        }
+
+        req.id = decoded.decodedToken.user_id;
+        req.authToken = authToken;
+        req.role = decoded.decodedToken.role || 'USER';
+        req.identityToken = identityToken;
+
         return next();
     } catch (err) {
-        // need to add handlecatch function here
-        res.status(500).json({ error: 'something went wrong' });
+        res.status(500).json({ success: false, error: 'Internal server error' });
     }
 };
 
-export { requireAuth };
+export default requireAuth;

@@ -8,4 +8,9 @@ export interface IMinimalLoginToken {
     adminId?: string;
     userId?: string;
     adminPermissions?: AdminPermissions['permissions'];
+    identityCode: string;
 };
+
+export interface IMinimalUserToken {
+    user_id: string;
+}

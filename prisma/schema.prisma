@@ -24,11 +24,17 @@ enum AdminPermission {
   READ
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
 /// ==================== MODELS ====================
 
 model Auth {
   id        String   @id @default(cuid())
-  email     String   @unique
+  emailId   String   @unique
   password  String
   role      Role
   createdAt DateTime @default(now())
@@ -54,8 +60,8 @@ model SuperAdmin {
   lastName        String
   officialEmailId String       @unique
   personalEmailId String
-  phNo            String
-  alternativePhNo String?
+  phNo            BigInt
+  alternativePhNo BigInt?
   createdAt       DateTime     @default(now())
   personalInfoId  String
   personalInfo    PersonalInfo @relation(fields: [personalInfoId], references: [id])
@@ -76,8 +82,8 @@ model Admin {
   lastName        String
   officialEmailId String           @unique
   personalEmailId String
-  phNo            String
-  alternativePhNo String?
+  phNo            BigInt
+  alternativePhNo BigInt?
   createdAt       DateTime         @default(now())
   personalInfoId  String
   personalInfo    PersonalInfo     @relation(fields: [personalInfoId], references: [id])
@@ -108,12 +114,12 @@ model AdminPermissions {
 
 model PersonalInfo {
   id          String       @id @default(cuid())
-  aadharUrl   String
-  panCardUrl  String
+  aadharUrl   String?
+  panCardUrl  String?
   address     String
   fatherName  String
   motherName  String
-  gender      String
+  gender      Gender
   dob         DateTime
   city        String
   state       String
@@ -130,7 +136,7 @@ model User {
   id        String   @id @default(cuid())
   name      String
   email     String   @unique
-  phNo      String
+  phNo      BigInt
   createdAt DateTime @default(now())
 
   datasets DatasetLookup[]

@@ -1,4 +1,7 @@
+import { RoleOptions } from './../../../constants/modelConstants';
 import { Request } from "express";
+import { SuperAdminPermissionsOptions } from "../../../constants/modelConstants";
+
 
 interface ICustomLogInRequest extends Request {
     body: {
@@ -7,5 +10,15 @@ interface ICustomLogInRequest extends Request {
     }
 }
 
+interface ICustomRequest extends Request {
+    id?: string;
+    authToken?: string;
+    role?: RoleOptions;
+    identityToken?: string;
+}
 
-export { ICustomLogInRequest };
+
+interface ICutomeSuperAdminRequest extends ICustomRequest {
+    AdminPermissions?: SuperAdminPermissionsOptions[];
+}
+export { ICustomLogInRequest, ICustomRequest, ICutomeSuperAdminRequest };
