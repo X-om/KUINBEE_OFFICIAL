@@ -3,7 +3,7 @@ import { IUnifiedResponse } from "../../utility/common/interfaces/customeRespons
 import { ICustomLogInRequest } from "../../utility/common/interfaces/customeRequestInterface";
 import { verifyPassword } from "../../utility/common/security/crypto";
 import { prisma } from "../../client/getPrismaClient";
-import { generateAuthToken } from "../../utility/common/security/jwtUtils";
+import { encryptData, generateAuthToken } from "../../utility/common/security/jwtUtils";
 import { IMinimalLoginToken } from "../../utility/common/interfaces/tokenInterface";
 import { KUINBEE_SUPER_ADMIN_IDENTITY_CODE } from "../../env";
 
@@ -27,7 +27,6 @@ const loginPassword = async (req: ICustomLogInRequest, res: Response<IUnifiedRes
         } satisfies IMinimalLoginToken;
 
         const token = generateAuthToken(jwtPayload);
-
         return void res.status(200).json({ success: true, data: { token, identityCode: KUINBEE_SUPER_ADMIN_IDENTITY_CODE } });
     } catch (error) {
         return void res.status(500).json({ success: false, error: 'Internal server error' });
